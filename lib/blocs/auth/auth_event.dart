@@ -1,31 +1,42 @@
-import 'package:flutter/cupertino.dart';
+part of 'auth_bloc.dart';
 
-abstract class AuthEvent {}
-
-class AuthInitialEvent extends AuthEvent {}
-
-class AuthLoginEvent extends AuthEvent {
-  AuthLoginEvent({required this.email, required this.password});
-
-  final String email;
-  final String password;
+abstract class AuthEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-class AuthRegisterEvent extends AuthEvent {
-  AuthRegisterEvent({
-    required this.name,
-    required this.email,
-    required this.password,
+class CheckAuthenticationEvent extends AuthEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class LoginUserEvent extends AuthEvent {
+  final String username;
+  final String password;
+
+  LoginUserEvent({required this.username, required this.password});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class RegisterUserEvent extends AuthEvent {
+  final UserModel userModel;
+
+  RegisterUserEvent({
+    required this.userModel,
   });
 
-  final String name;
-  final String email;
-  final String password;
+  @override
+  List<Object?> get props => [userModel];
 }
 
-class AuthGoogleEvent extends AuthEvent {
-  AuthGoogleEvent(this.context, [this.clientId]);
+class LogOutUserEvent extends AuthEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-  final BuildContext context;
-  final String? clientId;
+class SignInWithGoogleEvent extends AuthEvent {
+  @override
+  List<Object?> get props => [];
 }

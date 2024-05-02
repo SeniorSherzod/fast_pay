@@ -1,3 +1,4 @@
+import 'package:fast_pay/blocs/auth/auth_bloc.dart';
 import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/utils/connstants/app_const.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
@@ -5,6 +6,7 @@ import 'package:fast_pay/utils/images/images.dart';
 import 'package:fast_pay/utils/styles/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/textfield.dart';
 
@@ -103,9 +105,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: TextButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                //   context.read<SignInBloc>().add(SignInRequired(
-                                //       emailController.text,
-                                //       passwordController.text));
+                                  context.read<AuthBloc>().add(LoginUserEvent(
+                                      username:  emailController.text,
+                                     password:  passwordController.text, ));
                               }
                             },
                             style: TextButton.styleFrom(

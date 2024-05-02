@@ -1,14 +1,29 @@
+part of 'auth_bloc.dart';
 
-abstract class AuthState {}
+class AuthState extends Equatable {
+  final String errorMessage;
+  final String statusMessage;
+  final FormsStatus status;
 
-class AuthInitialState extends AuthState {}
+  const AuthState(
+      {required this.status,
+      required this.errorMessage,
+      required this.statusMessage});
 
-class AuthLoadingState extends AuthState {}
-
-class AuthSuccessState extends AuthState {}
-
-class AuthErrorState extends AuthState {
-  AuthErrorState({required this.errorText});
-
-  final String errorText;
+  AuthState copyWith({
+    String? errorMessage,
+    String? statusMessage,
+    FormsStatus? status,
+  }) {
+    return AuthState(
+        status: status ?? this.status,
+        errorMessage: errorMessage ?? this.errorMessage,
+        statusMessage: statusMessage ?? this.statusMessage);
+  }
+  @override
+  List<Object?> get props=>[
+    status,
+    statusMessage,
+    errorMessage
+  ];
 }

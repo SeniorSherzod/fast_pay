@@ -1,6 +1,11 @@
+import 'package:fast_pay/blocs/auth/auth_bloc.dart';
+import 'package:fast_pay/data/models/user_model.dart';
+import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/utils/connstants/app_const.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/images/images.dart';
 import '../widgets/textfield.dart';
@@ -20,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   IconData iconPassword = CupertinoIcons.eye_fill;
   final nameController = TextEditingController();
   bool signUpRequired = false;
-
+UserModel userModel=UserModel.initial();
   bool containsUpperCase = false;
   bool containsLowerCase = false;
   bool containsNumber = false;
@@ -226,15 +231,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             //   name: nameController.text,
                             // );
         
-                            // setState(() {
-                              // context.read<SignUpBloc>().add(
-                              //     SignUpRequired(
-                              //         myUser,
-                              //         passwordController.text
-                              //     )
-                            //   );
-                            // }
-                            // );
+                            setState(() {
+                              context.read<AuthBloc>().add(
+                                  RegisterUserEvent(
+                                       userModel:userModel
+                                  )
+                              );
+                              Navigator.pushNamed(context, RouteNames.tabRoute);
+                            }
+                            );
                           }
                         },
                         style: TextButton.styleFrom(
