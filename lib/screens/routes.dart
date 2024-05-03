@@ -1,4 +1,8 @@
 import 'package:fast_pay/screens/auth/register_screen.dart';
+import 'package:fast_pay/screens/local_auth/method_one/confirming_pin_screen.dart';
+import 'package:fast_pay/screens/local_auth/method_one/entry_pin_screen.dart';
+import 'package:fast_pay/screens/local_auth/method_one/set_pin_screen.dart';
+import 'package:fast_pay/screens/local_auth/method_two/touch_id_screen.dart';
 import 'package:fast_pay/screens/payment/payment_screen.dart';
 import 'package:fast_pay/screens/splash/splash.dart';
 import 'package:fast_pay/screens/tab/tab_screen.dart';
@@ -30,10 +34,18 @@ class AppRoutes {
         return navigate(const AuthScreen());
       case RouteNames.onBoardingRoute:
         return navigate(const OnBoardingScreen());
-        case RouteNames.logIN:
-          return navigate(const AuthScreen());
-        case RouteNames.register:
-         return navigate(const RegisterScreen());
+      case RouteNames.logIN:
+        return navigate(const AuthScreen());
+      case RouteNames.register:
+        return navigate(const RegisterScreen());
+      case RouteNames.setPinRoute:
+        return navigate(const SetpinScreen());
+      case RouteNames.confirmPinRoute:
+        return navigate(const ConfirmPinScreen());
+      case RouteNames.entryPinRoute:
+        return navigate(const EntryPinScreen());
+      case RouteNames.touchId:
+        return navigate(const TouchIdScreen());
 
       default:
         return navigate(
@@ -61,4 +73,8 @@ class RouteNames {
   static const String onBoardingRoute = "/on_boarding_route";
   static const String logIN = "/log_In_route";
   static const String register = "/register_route";
+  static const String setPinRoute = "/setPinRoute_route";
+  static const String confirmPinRoute = "/confirmPinRoute_route";
+  static const String entryPinRoute = "/entryPinRoute_route";
+  static const String touchId = "/touchId_route";
 }

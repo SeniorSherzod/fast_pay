@@ -1,4 +1,5 @@
 import 'package:fast_pay/blocs/auth/auth_bloc.dart';
+import 'package:fast_pay/data/models/forms_status.dart';
 import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/utils/connstants/app_const.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
@@ -28,6 +29,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+  builder: (context, state) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -58,7 +61,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         validator: (val) {
                           if (val!.isEmpty) {
                             return 'Please fill in this field';
-                          } else if (!AppConstants.emailRegExp.hasMatch(val)) {
+                          } else if (!AppConstants.emailRegExp
+                              .hasMatch(val)) {
                             return 'Please enter a valid email';
                           }
                           return null;
@@ -77,7 +81,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       validator: (val) {
                         if (val!.isEmpty) {
                           return 'Please fill in this field';
-                        } else if (!AppConstants.passwordRegExp.hasMatch(val)) {
+                        } else if (!AppConstants.passwordRegExp
+                            .hasMatch(val)) {
                           return 'Please enter a valid password';
                         }
                         return null;
@@ -105,15 +110,15 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: TextButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                  context.read<AuthBloc>().add(LoginUserEvent(
-                                      username:  emailController.text,
-                                     password:  passwordController.text, ));
+                                context.read<AuthBloc>().add(LoginUserEvent(
+                                      username: emailController.text,
+                                      password: passwordController.text,
+                                    ));
                               }
                             },
                             style: TextButton.styleFrom(
                                 elevation: 3.0,
-                                backgroundColor:
-                                   Colors.lightBlueAccent,
+                                backgroundColor: Colors.lightBlueAccent,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(60))),
@@ -140,10 +145,16 @@ class _AuthScreenState extends State<AuthScreen> {
                         Navigator.pushNamed(context, RouteNames.register);
                       },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.lightBlueAccent.withOpacity(0.8), // Text color
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Button padding
+                        foregroundColor: Colors.white,
+                        backgroundColor:
+                            Colors.lightBlueAccent.withOpacity(0.8),
+                        // Text color
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        // Button padding
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30), // Button border radius
+                          borderRadius: BorderRadius.circular(
+                              30), // Button border radius
                         ),
                       ),
                       child: Text(
@@ -156,11 +167,12 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                   )
-        
                 ],
               ),
             )),
       ),
     );
+  },
+);
   }
 }

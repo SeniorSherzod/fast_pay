@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "950098412298",
+    "firebase_url": "https://fast-pay-7a66f-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "fast-pay-7a66f",
     "storage_bucket": "fast-pay-7a66f.appspot.com"
   },
@@ -9,10 +10,23 @@
       "client_info": {
         "mobilesdk_app_id": "1:950098412298:android:6e433d5c85a3c7f67af0f3",
         "android_client_info": {
-          "package_name": "uz.fast.pay"
+          "package_name": "com.example.fast_pay"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "950098412298-a5otrf8ug9mmnh12magjnpdmb5u0f343.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fast_pay",
+            "certificate_hash": "1e68a94e0872fa1b769d17508c98c8fa72e21ea5"
+          }
+        },
+        {
+          "client_id": "950098412298-6a71u92sk9tsulrrtvbqne0s6dvv8bh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDkevph6oBADe3l0WnWPLakrya_ENF6YD4"
@@ -20,7 +34,55 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950098412298-6a71u92sk9tsulrrtvbqne0s6dvv8bh2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950098412298-orhapihb2694p94gils5egsi29jv4qc8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fastPay"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950098412298:android:0a21ccdd2942d0137af0f3",
+        "android_client_info": {
+          "package_name": "uz.fast.pay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950098412298-6a71u92sk9tsulrrtvbqne0s6dvv8bh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkevph6oBADe3l0WnWPLakrya_ENF6YD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950098412298-6a71u92sk9tsulrrtvbqne0s6dvv8bh2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950098412298-orhapihb2694p94gils5egsi29jv4qc8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fastPay"
+              }
+            }
+          ]
         }
       }
     }

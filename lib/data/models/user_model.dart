@@ -6,6 +6,8 @@ class UserModel {
   final String image;
   final String phoneNumber;
   final String userId;
+  final String authId;
+  final String fsm;
 
   UserModel(
       {required this.image,
@@ -14,7 +16,10 @@ class UserModel {
       required this.username,
       required this.password,
       required this.email,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      required this.fsm,
+        required this.authId
+      });
 
   UserModel copyWith({
     String? username,
@@ -24,6 +29,8 @@ class UserModel {
     String? image,
     String? phoneNumber,
     String? userId,
+    String? authId,
+    String? fsm,
   }) {
     return UserModel(
         image: image ?? this.image,
@@ -32,7 +39,9 @@ class UserModel {
         username: username ?? this.username,
         password: password ?? this.password,
         email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber);
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        authId: authId ?? this.authId,
+        fsm: fsm ?? this.fsm);
   }
 
   Map<String, dynamic> toJson() => {
@@ -42,9 +51,22 @@ class UserModel {
         "image": image,
         "email": email,
         "password": password,
-        "phoneNumber": phoneNumber
+        "phoneNumber": phoneNumber,
+        "fsm": fsm,
+        "authId": authId
       };
 
+  Map<String, dynamic> toJsonForUpdate() => {
+    "userId": userId,
+    "lastname": lastname,
+    "username": username,
+    "image": image,
+    "email": email,
+    "password": password,
+    "phoneNumber": phoneNumber,
+    "fsm": fsm,
+    "authId": authId
+  };
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
         image: json["image"] as String? ?? "",
@@ -53,7 +75,9 @@ class UserModel {
         username: json["username"] as String? ?? "",
         password: json["password"] as String? ?? "",
         email: json["email"] as String? ?? "",
-        phoneNumber: json["phoneNumber"] as String? ?? "");
+        phoneNumber: json["phoneNumber"] as String? ?? "",
+        authId: json["authId"] as String? ?? "",
+        fsm: json["fsm"] as String? ?? "");
   }
 
   static UserModel initial() => UserModel(
@@ -63,5 +87,7 @@ class UserModel {
       username: "",
       password: "",
       email: "",
+      fsm: "",
+      authId: "",
       phoneNumber: "");
 }

@@ -9,104 +9,111 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../data/models/forms_status.dart';
 import '../../data/models/user_model.dart';
-import '../../data/repositories/user repository.dart';
+import '../../data/repositories/user_profile_repository.dart';
+
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required this.authRepository}) : super(const AuthState(status: FormsStatus.pure, errorMessage: "", statusMessage: "")) {
+  AuthBloc({required this.authRepository})
+      : super(AuthState.init()) {
     on<CheckAuthenticationEvent>(_checkAuthentication);
     on<LoginUserEvent>(_loginUser);
     on<LogOutUserEvent>(_logOutUser);
     on<RegisterUserEvent>(_registerUser);
-    on<SignInWithGoogleEvent>(_signInWithGoogle);
-
+    on<SignInWithGoogleEvent>(_googleSignIn);
   }
-
 
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-final AuthRepository authRepository;
+  final AuthRepository authRepository;
 
-_checkAuthentication(CheckAuthenticationEvent event, emit)async{
-  User? user = FirebaseAuth.instance.currentUser;
-  if(user == null){
-    emit(state.copyWith(status: FormsStatus.unauthenticated));
-  }else{
-    emit(state.copyWith(status: FormsStatus.authenticated));
-  }
-}
-_loginUser(LoginUserEvent event, emit) async {
-    emit(state.copyWith(status: FormsStatus.loading));
-    NetworkResponse networkResponse=
-        await authRepository.logInWithEmailAndPassword(email: "${event.username}@gmail.com",
-            password: event.password);
-   if(networkResponse.errorText.isNotEmpty){
-     emit(state.copyWith(
-       status: FormsStatus.authenticated,
-     ));
-   }else{
-     emit(
-       state.copyWith(
-         status: FormsStatus.error,
-         statusMessage: networkResponse.errorText
-       ),
-     );
-   }
+  _checkAuthentication(CheckAuthenticationEvent event, emit) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      emit(state.copyWith(status: FormsStatus.unauthenticated));
+    } else {
+      emit(state.copyWith(status: FormsStatus.authenticated));
+    }
   }
 
-   _registerUser(RegisterUserEvent event, emit) async {
+  _loginUser(LoginUserEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
-    NetworkResponse networkResponse=
-    await authRepository.registerWithEmailAndPassword(email: "${event.userModel.username}@gmail.com",
-        password: event.userModel.password);
-    if(networkResponse.errorText.isNotEmpty){
+    NetworkResponse networkResponse =
+        await authRepository.logInWithEmailAndPassword(
+            email: "${event.username}@gmail.com", password: event.password);
+    if (networkResponse.errorText.isNotEmpty) {
+      emit(state.copyWith(
+        status: FormsStatus.authenticated,
+      ));
+    } else {
+      emit(
+        state.copyWith(
+            status: FormsStatus.error,
+            statusMessage: networkResponse.errorText),
+      );
+    }
+  }
+
+  _registerUser(RegisterUserEvent event, emit) async {
+    emit(state.copyWith(status: FormsStatus.loading));
+    NetworkResponse networkResponse =
+        await authRepository.registerWithEmailAndPassword(
+            email: "${event.userModel.username}@gmail.com",
+            password: event.userModel.password);
+    if (networkResponse.errorText.isNotEmpty) {
       emit(state.copyWith(
         status: FormsStatus.authenticated,
         // statusMessage: networkResponse.data as UserCredential,
       ));
-    }else{
+    } else {
       emit(
         state.copyWith(
             status: FormsStatus.error,
-            statusMessage: networkResponse.errorText
-        ),
-      );
-    }
-  }
-   _logOutUser(LogOutUserEvent event, emit) async {
-    emit(state.copyWith(status: FormsStatus.loading));
-    NetworkResponse networkResponse=
-    await authRepository.logOutUser();
-    if(networkResponse.errorText.isNotEmpty){
-      emit(state.copyWith(
-        status: FormsStatus.authenticated,
-        statusMessage: networkResponse.data as String,
-      ));
-    }else{
-      emit(
-        state.copyWith(
-            status: FormsStatus.error,
-            statusMessage: networkResponse.errorText
-        ),
+            statusMessage: networkResponse.errorText),
       );
     }
   }
 
-  Future<void> _signInWithGoogle(SignInWithGoogleEvent event, emit) async {
+  _logOutUser(LogOutUserEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
-    NetworkResponse networkResponse=
-    await authRepository.googleSignIn();
-    if(networkResponse.errorText.isNotEmpty){
+    NetworkResponse networkResponse = await authRepository.logOutUser();
+    if (networkResponse.errorText.isNotEmpty) {
       emit(state.copyWith(
         status: FormsStatus.authenticated,
         statusMessage: networkResponse.data as String,
       ));
-    }else{
+    } else {
       emit(
         state.copyWith(
             status: FormsStatus.error,
-            statusMessage: networkResponse.errorText
-        ),
+            statusMessage: networkResponse.errorText),
+      );
+    }
+  }
+
+  _googleSignIn(SignInWithGoogleEvent event, emit) async {
+    emit(state.copyWith(status: FormsStatus.loading));
+    NetworkResponse networkResponse = await authRepository.googleSignIn();
+    if (networkResponse.errorText.isNotEmpty) {
+      UserCredential userCredential = networkResponse.data;
+      emit(state.copyWith(
+          status: FormsStatus.authenticated,
+          userModel: UserModel(
+              image: userCredential.user!.photoURL ?? "",
+              userId: "",
+              lastname: userCredential.user!.displayName ?? "",
+              username: "",
+              password: "",
+              email: userCredential.user!.email ?? "",
+              phoneNumber: userCredential.user!.phoneNumber ?? "",
+              authId: "",
+              fsm: "")));
+    } else {
+      emit(
+        state.copyWith(
+            status: FormsStatus.error,
+            statusMessage: networkResponse.errorText),
       );
     }
   }
