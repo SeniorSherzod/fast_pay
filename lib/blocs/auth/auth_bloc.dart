@@ -25,7 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignInWithGoogleEvent>(_googleSignIn);
   }
 
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final AuthRepository authRepository;
   final UserModel userModel=UserModel.initial();
 
@@ -42,10 +41,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse =
         await authRepository.logInWithEmailAndPassword(
-            email: "${event.username}@gmail.com", password: event.password);
-    if (networkResponse.errorText.isNotEmpty) {
+            email: "${event.username.toLowerCase()}@gmail.com",
+            password: event.password);
+    if (networkResponse.errorText.isEmpty) {
+      UserCredential userCredential =networkResponse.data as UserCredential;
+
+      UserModel userModel =state.userModel.copyWith(authId: userCredential.user!.uid);
+
       emit(state.copyWith(
         status: FormsStatus.authenticated,
+        userModel: userModel,
       ));
     } else {
       emit(
@@ -59,20 +64,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   _registerUser(RegisterUserEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse =
-        await authRepository.registerWithEmailAndPassword(
-            email: event.userModel.email,
-            password: event.userModel.password);
-    if (networkResponse.errorText.isNotEmpty) {
-     UserCredential userCredential = networkResponse.data as UserCredential;
-     UserModel userModel =event.userModel.copyWith(
-       authId: userCredential.user!.uid,
-     );
-    } else {
+    await authRepository.registerWithEmailAndPassword(
+        email: event.userModel.email,
+        password: event.userModel.password);
+    if (networkResponse.errorText.isEmpty) {
+      UserCredential userCredential = networkResponse.data as UserCredential;
+      UserModel userModel = event.userModel.copyWith(
+        authId: userCredential.user!.uid,
+      );
+    emit(
+      state.copyWith(
+          status: FormsStatus.authenticated,
+          statusMessage: "registered",
+          userModel: userModel
+      ),
+    );
+  }
+    else {
+      debugPrint("Error register user!!${networkResponse.errorCode}");
       emit(
         state.copyWith(
-            status: FormsStatus.authenticated,
-            statusMessage: "registered",
-          userModel: userModel
+          status: FormsStatus.error,
+          errorMessage: networkResponse.errorText,
         ),
       );
     }
@@ -81,10 +94,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   _logOutUser(LogOutUserEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse = await authRepository.logOutUser();
-    if (networkResponse.errorText.isNotEmpty) {
+    if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(
         status: FormsStatus.authenticated,
-        statusMessage: networkResponse.data as String,
       ));
     } else {
       emit(
@@ -98,19 +110,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   _googleSignIn(SignInWithGoogleEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse = await authRepository.googleSignIn();
-    if (networkResponse.errorText.isNotEmpty) {
+    if (networkResponse.errorText.isEmpty) {
       UserCredential userCredential = networkResponse.data;
       emit(state.copyWith(
+        statusMessage: "registered",
           status: FormsStatus.authenticated,
           userModel: UserModel(
               image: userCredential.user!.photoURL ?? "",
               userId: "",
               lastname: userCredential.user!.displayName ?? "",
-              username: "",
+              username: userCredential.user!.displayName ?? "",
               password: "",
               email: userCredential.user!.email ?? "",
               phoneNumber: userCredential.user!.phoneNumber ?? "",
-              authId: "",
+              authId: userCredential.user!.uid,
               fsm: "")));
     } else {
       emit(

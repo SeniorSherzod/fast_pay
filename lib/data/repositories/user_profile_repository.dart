@@ -70,7 +70,7 @@ class UserProfileRepository{
           .doc(docId)
           .get();
       return NetworkResponse(
-        data: UserModel.fromJson(documentSnapshot.data()as Map<String,dynamic>,),);
+        data: UserModel.fromJson(documentSnapshot.data() as Map<String,dynamic>,),);
     }on FirebaseException catch (error){
       debugPrint("user add error: $error");
       return NetworkResponse(errorCode: error.code);

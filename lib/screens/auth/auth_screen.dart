@@ -1,4 +1,5 @@
 import 'package:fast_pay/blocs/auth/auth_bloc.dart';
+import 'package:fast_pay/blocs/user_profile/user_profile_bloc.dart';
 import 'package:fast_pay/data/models/forms_status.dart';
 import 'package:fast_pay/screens/auth/widgets/my_button.dart';
 import 'package:fast_pay/screens/routes.dart';
@@ -6,6 +7,7 @@ import 'package:fast_pay/utils/connstants/app_const.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
 import 'package:fast_pay/utils/images/images.dart';
 import 'package:fast_pay/utils/styles/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
   IconData iconPassword = CupertinoIcons.eye_fill;
 
   bool isValidCredentials() =>
-      AppConstants.textRegExp.hasMatch(usernameController.text) &&
+      AppConstants.emailRegExp.hasMatch(usernameController.text) &&
       AppConstants.passwordRegExp.hasMatch(passwordController.text);
 
   @override
@@ -116,7 +118,14 @@ class _AuthScreenState extends State<AuthScreen> {
                       isLoading: false,
                       onTab: () {
                     Navigator.pushNamed(context, RouteNames.register);
-                      })
+                      }),
+                  20.getH(),
+                  MyCustomButton(title: "Sign in with Google",
+                      isLoading: false,
+                      onTab: () {
+                        context.read<AuthBloc>().add(SignInWithGoogleEvent());
+                        Navigator.pushNamed(context, RouteNames.tabRoute);
+                      }),
                 ],
               ),
             ),
@@ -128,7 +137,16 @@ class _AuthScreenState extends State<AuthScreen> {
                 .showSnackBar(SnackBar(content: Text(state.errorMessage)));
           }
           if(state.status == FormsStatus.authenticated){
-            Navigator.pushNamed(context, RouteNames.tabRoute);
+            if(state.statusMessage =="registered"){
+              BlocProvider.of<UserProfileBloc>(context).add(
+                AddUserEvent(state.userModel)
+              );
+            }else{
+              BlocProvider.of<UserProfileBloc>(context).add(
+                  GetCurrentEvent(state.userModel.authId,));
+            }
+            Navigator.pushNamedAndRemoveUntil(context, RouteNames.tabRoute,
+                (route)=>false);
           }
         },
       ),
