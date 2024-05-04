@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final AuthRepository authRepository;
+  final UserModel userModel=UserModel.initial();
 
   _checkAuthentication(CheckAuthenticationEvent event, emit) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -59,18 +60,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse =
         await authRepository.registerWithEmailAndPassword(
-            email: "${event.userModel.username}@gmail.com",
+            email: event.userModel.email,
             password: event.userModel.password);
     if (networkResponse.errorText.isNotEmpty) {
-      emit(state.copyWith(
-        status: FormsStatus.authenticated,
-        // statusMessage: networkResponse.data as UserCredential,
-      ));
+     UserCredential userCredential = networkResponse.data as UserCredential;
+     UserModel userModel =event.userModel.copyWith(
+       authId: userCredential.user!.uid,
+     );
     } else {
       emit(
         state.copyWith(
-            status: FormsStatus.error,
-            statusMessage: networkResponse.errorText),
+            status: FormsStatus.authenticated,
+            statusMessage: "registered",
+          userModel: userModel
+        ),
       );
     }
   }
@@ -117,4 +120,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     }
   }
+
 }

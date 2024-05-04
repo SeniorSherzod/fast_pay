@@ -40,3 +40,27 @@ class SignInWithGoogleEvent extends AuthEvent {
   @override
   List<Object?> get props => [];
 }
+class IsValidToInsert extends AuthEvent {
+  final String password;
+  final String username;
+  final String lastname;
+  final String phone;
+  final String confirmPassword;
+
+  IsValidToInsert({
+    required this.confirmPassword,
+    required this.lastname,
+    required this.password,
+     required this.username,
+    required this.phone
+});
+
+  @override
+  List<Object?> get props => [
+    password,
+    lastname,
+    phone,
+    username,
+    confirmPassword
+  ];
+}

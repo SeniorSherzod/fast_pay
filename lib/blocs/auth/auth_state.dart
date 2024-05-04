@@ -6,6 +6,7 @@ class AuthState extends Equatable {
   final FormsStatus status;
   final UserModel userModel;
 
+
   const AuthState(
       {required this.status,
       required this.errorMessage,

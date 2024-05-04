@@ -1,5 +1,6 @@
 import 'package:fast_pay/blocs/auth/auth_bloc.dart';
 import 'package:fast_pay/data/models/forms_status.dart';
+import 'package:fast_pay/screens/auth/widgets/my_button.dart';
 import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/utils/connstants/app_const.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
@@ -19,22 +20,22 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   String? _errorMsg;
   bool obscurePassword = true;
   IconData iconPassword = CupertinoIcons.eye_fill;
-  bool signInRequired = false;
+
+  bool isValidCredentials() =>
+      AppConstants.textRegExp.hasMatch(usernameController.text) &&
+      AppConstants.passwordRegExp.hasMatch(passwordController.text);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-  builder: (context, state) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-            key: _formKey,
+      body: BlocConsumer<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 20,
@@ -52,18 +53,16 @@ class _AuthScreenState extends State<AuthScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: MyTextField(
-                        controller: emailController,
-                        hintText: 'Email',
+                        controller: usernameController,
+                        hintText: 'name',
                         obscureText: false,
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(CupertinoIcons.mail_solid),
+                        keyboardType: TextInputType.text,
                         errorMsg: _errorMsg,
                         validator: (val) {
                           if (val!.isEmpty) {
                             return 'Please fill in this field';
-                          } else if (!AppConstants.emailRegExp
-                              .hasMatch(val)) {
-                            return 'Please enter a valid email';
+                          } else if (!AppConstants.textRegExp.hasMatch(val)) {
+                            return 'Please enter a  username';
                           }
                           return null;
                         }),
@@ -81,8 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       validator: (val) {
                         if (val!.isEmpty) {
                           return 'Please fill in this field';
-                        } else if (!AppConstants.passwordRegExp
-                            .hasMatch(val)) {
+                        } else if (!AppConstants.passwordRegExp.hasMatch(val)) {
                           return 'Please enter a valid password';
                         }
                         return null;
@@ -103,76 +101,44 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  !signInRequired
-                      ? SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 50,
-                          child: TextButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                context.read<AuthBloc>().add(LoginUserEvent(
-                                      username: emailController.text,
-                                      password: passwordController.text,
-                                    ));
-                              }
-                            },
-                            style: TextButton.styleFrom(
-                                elevation: 3.0,
-                                backgroundColor: Colors.lightBlueAccent,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(60))),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 5),
-                              child: Text(
-                                'Sign In',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        )
-                      : const CircularProgressIndicator(),
+                  MyCustomButton(
+                    onTab: () {
+                      context.read<AuthBloc>().add(LoginUserEvent(
+                          username: usernameController.text,
+                          password: passwordController.text));
+                    },
+                    title: "login",
+                    readyToSubmit: isValidCredentials(),
+                    isLoading: state.status == FormsStatus.loading,
+                  ),
                   20.getH(),
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, RouteNames.register);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor:
-                            Colors.lightBlueAccent.withOpacity(0.8),
-                        // Text color
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        // Button padding
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              30), // Button border radius
-                        ),
-                      ),
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontFamily: 'Rubik',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  )
+                  MyCustomButton(title: "Register",
+                      isLoading: false,
+                      onTab: () {
+                    Navigator.pushNamed(context, RouteNames.register);
+                      })
                 ],
               ),
-            )),
+            ),
+          );
+        },
+        listener: (context, state) {
+          if (state.status == FormsStatus.error) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+          }
+          if(state.status == FormsStatus.authenticated){
+            Navigator.pushNamed(context, RouteNames.tabRoute);
+          }
+        },
       ),
     );
-  },
-);
+  }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    usernameController.dispose();
+    super.dispose();
   }
 }

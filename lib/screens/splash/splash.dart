@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_pay/blocs/auth/auth_bloc.dart';
+import 'package:fast_pay/blocs/user_profile/user_profile_bloc.dart';
 import 'package:fast_pay/data/models/forms_status.dart';
 import 'package:fast_pay/utils/images/images.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -22,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 2),
     );
 
-
+    if (!mounted) return;
     if (isAuthenticated == false) {
       bool isNewUser = StorageRepository.getBool(key: "is_new_user");
       if (isNewUser) {
@@ -31,13 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacementNamed(context, RouteNames.onBoardingRoute);
       }
     } else {
-
       Navigator.pushReplacementNamed(context, RouteNames.tabRoute);
     }
   }
 
-
-
+  //
   @override
   void initState() {
     _init(false);
@@ -53,21 +55,18 @@ class _SplashScreenState extends State<SplashScreen> {
         body: BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.status == FormsStatus.authenticated) {
+          BlocProvider.of<UserProfileBloc>(context).add(
+              GetCurrentEvent(uid: FirebaseAuth.instance.currentUser!.uid));
           print("true ee");
           _init(true);
-          setState(() {
-
-          });
+          // setState(() {});
         } else {
           print("false ee");
-          setState(() {
-
-          });
+          // setState(() {});
           _init(false);
         }
-
       },
-          child: Center(child: Lottie.asset(AppImages.lotty)),
+      child: Center(child: Lottie.asset(AppImages.lotty)),
     ));
   }
 }
