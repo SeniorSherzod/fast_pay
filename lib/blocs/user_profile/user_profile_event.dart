@@ -35,7 +35,7 @@ class GetUserByDocIdEvent extends UserProfileEvent {
   GetUserByDocIdEvent({required this.docId});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [docId];
 }
 
 class GetCurrentEvent extends UserProfileEvent {
@@ -44,5 +44,5 @@ class GetCurrentEvent extends UserProfileEvent {
   GetCurrentEvent(this.uid);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [uid];
 }

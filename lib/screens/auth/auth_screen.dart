@@ -42,7 +42,7 @@ class _AuthScreenState extends State<AuthScreen> {
               padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
-                top: 250,
+                top: 1600,
               ),
               child: Column(
                 children: [
@@ -113,18 +113,18 @@ class _AuthScreenState extends State<AuthScreen> {
                     readyToSubmit: isValidCredentials(),
                     isLoading: state.status == FormsStatus.loading,
                   ),
-                  20.getH(),
+                  const SizedBox(height: 20),
                   MyCustomButton(title: "Register",
                       isLoading: false,
                       onTab: () {
                     Navigator.pushNamed(context, RouteNames.register);
                       }),
-                  20.getH(),
+                  const SizedBox(height: 20),
                   MyCustomButton(title: "Sign in with Google",
                       isLoading: false,
                       onTab: () {
                         context.read<AuthBloc>().add(SignInWithGoogleEvent());
-                        Navigator.pushNamed(context, RouteNames.tabRoute);
+                        Navigator.pushNamed(context, RouteNames.setPinRoute);
                       }),
                 ],
               ),

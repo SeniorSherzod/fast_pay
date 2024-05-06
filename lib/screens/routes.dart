@@ -1,3 +1,4 @@
+import 'package:fast_pay/blocs/user_profile/user_profile_bloc.dart';
 import 'package:fast_pay/screens/auth/register_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_one/confirming_pin_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_one/entry_pin_screen.dart';
@@ -5,6 +6,7 @@ import 'package:fast_pay/screens/local_auth/method_one/set_pin_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_two/touch_id_screen.dart';
 import 'package:fast_pay/screens/payment/payment_screen.dart';
 import 'package:fast_pay/screens/splash/splash.dart';
+import 'package:fast_pay/screens/tab/profile/update_screen.dart';
 import 'package:fast_pay/screens/tab/tab_screen.dart';
 import 'package:fast_pay/screens/transfer/transfer_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class AppRoutes {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.splashScreen:
-        return navigate(const SplashScreen());
+        return navigate(SplashScreen());
 
       case RouteNames.tabRoute:
         return navigate(const TabScreen());
@@ -41,11 +43,15 @@ class AppRoutes {
       case RouteNames.setPinRoute:
         return navigate(const SetPinScreen());
       case RouteNames.confirmPinRoute:
-        return navigate( ConfirmPinScreen(previousPin: settings.arguments as String,));
+        return navigate(ConfirmPinScreen(
+          previousPin: settings.arguments as String,
+        ));
       case RouteNames.entryPinRoute:
         return navigate(const EntryPinScreen());
       case RouteNames.touchId:
         return navigate(const TouchIdScreen());
+      case RouteNames.updateUser:
+        return navigate(const Updatescreen());
 
       default:
         return navigate(
@@ -77,4 +83,5 @@ class RouteNames {
   static const String confirmPinRoute = "/confirmPinRoute_route";
   static const String entryPinRoute = "/entryPinRoute_route";
   static const String touchId = "/touchId_route";
+  static const String updateUser = "/updateUser_route";
 }

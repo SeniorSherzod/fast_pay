@@ -29,12 +29,12 @@ class _SetPinScreenState extends State<SetPinScreen> {
       ),
       body: Column(
         children: [
-          60.getH(),
+          SizedBox(height: 50,),
           Text(
             "Pin kodni O'rnating!",
             style: AppTextStyle.rubikMedium.copyWith(fontSize: 20),
           ),
-          32.getH(),
+          SizedBox(height: 30,),
           SizedBox(
             width: width / 2,
             child: PinPutTextView(
@@ -42,7 +42,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 pinPutController: pinPutController,
                 isError: isError),
           ),
-          32.getH(),
+          SizedBox(height: 20,),
           CustomKeyboardView(
             number: (number) {
               if (pinPutController.length < 4) {

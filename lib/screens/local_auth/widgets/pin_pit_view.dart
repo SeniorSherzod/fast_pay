@@ -18,12 +18,14 @@ class PinPutTextView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     width = MediaQuery.of(context).size.width;
+     height = MediaQuery.of(context).size.height;
    final defaultPnTheme = PinTheme(
      width: 42.w,
      height: 42.h,
      textStyle: TextStyle(
        fontSize: 36,
-       color: Colors.grey
+       color: Colors.black
      )
    );
     return SizedBox(
@@ -58,7 +60,7 @@ class PinPutTextView extends StatelessWidget {
           ),
         ),
         followingPinTheme: defaultPnTheme,
-        pinAnimationType: PinAnimationType.slide,
+        pinAnimationType: PinAnimationType.scale,
       ),
     );
   }

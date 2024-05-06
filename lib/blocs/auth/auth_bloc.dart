@@ -41,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: FormsStatus.loading));
     NetworkResponse networkResponse =
         await authRepository.logInWithEmailAndPassword(
-            email: "${event.username.toLowerCase()}@gmail.com",
+            email: event.username,
             password: event.password);
     if (networkResponse.errorText.isEmpty) {
       UserCredential userCredential =networkResponse.data as UserCredential;

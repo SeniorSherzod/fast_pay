@@ -1,6 +1,5 @@
 import 'package:fast_pay/blocs/user_profile/user_profile_bloc.dart';
 import 'package:fast_pay/data/models/forms_status.dart';
-import 'package:fast_pay/data/models/user_model.dart';
 import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/screens/widgets/textfield.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
@@ -20,14 +19,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final lastNameController = TextEditingController();
+
 
   // final Controller =TextEditingController();
   @override
   void initState() {
-    // BlocProvider.of<UserProfileBloc>(context).add(GetCurrentEvent(uid:UserModel. ));
+    Future.microtask(() {
+      BlocProvider.of<UserProfileBloc>(context).add(GetCurrentEvent(''));
+    });
+    super.initState();
   }
 
   @override
@@ -39,19 +39,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
-            if(state.status == FormsStatus.unauthenticated){
-              Navigator.pushNamed(context, RouteNames.authRoute);
-            }
+              if(state.status == FormsStatus.unauthenticated){
+                Navigator.pushReplacementNamed (context, RouteNames.authRoute);
+              }
             },
             child: IconButton(onPressed: () {
               context.read<AuthBloc>().add(LogOutUserEvent());
-              Navigator.pushNamed(context, RouteNames.authRoute);
+              Navigator.pushReplacementNamed(context, RouteNames.authRoute);
             }, icon: Icon(Icons.logout)),
           )
         ],
       ),
       body: BlocBuilder<UserProfileBloc, UserProfileState>(
         builder: (context, state) {
+          print('BlocBuilder<UserProfileBloc, UserProfileState>(: ${state.userModel.username}');
           return Padding(
             padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
@@ -59,14 +60,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   SizedBox(
                       width: 30,
-                      child: SvgPicture.asset(AppImages.profile,)),
+                      child: SvgPicture.asset(AppImages.profile,fit: BoxFit.cover,)),
                   Center(
                       child: Text(
                         state.userModel.username,
                         style: AppTextStyle.rubikMedium.copyWith(
                             fontSize: 25, color: Colors.black),
                       )),
-              
+
                   Center(
                       child: Text(
                         state.userModel.lastname,
@@ -74,24 +75,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontSize: 25, color: Colors.black),
                       )),
                   50.getH(),
-                  MyTextField(
-                      controller: nameController,
-                      hintText: state.userModel.username,
-                      obscureText: true,
-                      keyboardType: TextInputType.name),
-                  15.getH(),
-                  MyTextField(
-                      controller: phoneController,
-                      hintText: state.userModel.phoneNumber,
-                      obscureText: true,
-                      keyboardType: TextInputType.name),
-                  15.getH(),
-                  MyTextField(
-                      controller: lastNameController,
-                      hintText: state.userModel.lastname,
-                      obscureText: true,
-                      keyboardType: TextInputType.name),
-                  15.getH(),
+                  TextButton(
+                    onPressed: (){
+                      Navigator.pushNamed(context, RouteNames.updateUser);
+                    },
+                    child: Center(
+                        child: Text(
+                         "UPDATE USER INFO",
+                          style: AppTextStyle.rubikMedium.copyWith(
+                              fontSize: 25, color: Colors.black),
+                        )),
+                  ),
                 ],
               ),
             ),

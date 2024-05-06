@@ -45,7 +45,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
                 TextButton(
                   onPressed:(){
-
+                    // if (activeIndex == 0) {
+                    //   StorageRepository.setBool(
+                    //     key: "is_new_user",
+                    //     value: true,
+                    //   ).then(
+                    //         (value) {
+                    //       Navigator.pushReplacementNamed(
+                    //           context, RouteNames.authRoute);
+                    //     },
+                    //   );
+                    // }
                   },
                   child: Text(
                     "SKIP",
@@ -59,7 +69,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 controller: controller,
                 onPageChanged: (index) {},
                 physics: const NeverScrollableScrollPhysics(),
-                children: [
+                children: const [
                   BoardingOne(),
                   BoardingTwo(),
                   BoardingThree(),
@@ -88,7 +98,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   );
                 }
               },
-              child: Text("Next"),
+              child: const Text("Next"),
             )
           ],
         ),

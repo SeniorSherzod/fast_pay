@@ -18,24 +18,31 @@ class _TouchIdScreenState extends State<TouchIdScreen> {
       appBar: AppBar(
         title: Text("Touch id"),
       ),
-      body: Column(
-        children: [
-          Icon(
-            Icons.fingerprint_outlined,
-            size: 100,
-            color: Colors.blueAccent,
-          ),
-          MyCustomButton(
-            title: "Biometrics Auth",
-            onTab: enableBiometrics,
-          ),
-          MyCustomButton(
-              title: "Skip",
-              onTab: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, RouteNames.tabRoute, (route) => false);
-              })
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Icon(
+              Icons.fingerprint_outlined,
+              size: 100,
+              color: Colors.blueAccent,
+            ),
+            SizedBox(height: 20,),
+            MyCustomButton(
+              isLoading: false,
+              title: "Biometrics Auth",
+              onTab: enableBiometrics,
+            ),
+            SizedBox(height: 20,),
+            MyCustomButton(
+              isLoading: false,
+                title: "Skip",
+                onTab: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, RouteNames.tabRoute, (route) => false);
+                })
+          ],
+        ),
       ),
     );
   }

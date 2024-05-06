@@ -7,7 +7,6 @@ import 'package:fast_pay/utils/extensions/extensions.dart';
 import 'package:fast_pay/utils/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-
 import '../../routes.dart';
 
 class ConfirmPinScreen extends StatefulWidget {
@@ -41,7 +40,7 @@ class _ConfirmPinScreenState extends State<ConfirmPinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Entry pin"),
+        title: Text("Confirm pin"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +48,7 @@ class _ConfirmPinScreenState extends State<ConfirmPinScreen> {
         children: [
           60.getH(),
           Text(
-            "Pin kodlar  O'mos emas!",
+            "Pin kodni qayta kiriting !",
             style: AppTextStyle.rubikMedium.copyWith(fontSize: 20),
           ),
           32.getH(),
