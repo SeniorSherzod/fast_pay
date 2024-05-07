@@ -39,7 +39,7 @@ class _TouchIdScreenState extends State<TouchIdScreen> {
                 title: "Skip",
                 onTab: () {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, RouteNames.tabRoute, (route) => false);
+                      context, RouteNames.authRoute, (route) => false);
                 })
           ],
         ),

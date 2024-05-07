@@ -14,7 +14,7 @@ class AddUserEvent extends UserProfileEvent {
 class UpdateUserEvent extends UserProfileEvent {
   final UserModel userModel;
 
-  UpdateUserEvent(this.userModel);
+  UpdateUserEvent({required  this.userModel});
 
   @override
   List<Object?> get props => [userModel];

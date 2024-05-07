@@ -13,17 +13,17 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key}); // Corrected constructor syntax
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   bool hasPin = false;
 
   _init(bool isAuthenticated) async {
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 3));
     if (!mounted) return;
     if (isAuthenticated == false) {
-      bool isNewUser = await StorageRepository.getBool(
+      bool isNewUser =  StorageRepository.getBool(
           key:
               "is_new_user"); // Corrected syntax for calling asynchronous method
       if (isNewUser) {
@@ -44,7 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    _init(false); // Initially assuming the user is not authenticated
+    _init(false);
+    hasPin=StorageRepository.getString(key: "pin_code").isNotEmpty;
+    // Initially assuming the user is not authenticated
     super.initState();
   }
 

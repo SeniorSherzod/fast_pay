@@ -96,7 +96,10 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     NetworkResponse networkResponse =
         await userProfileRepository.getUserByUid();
     if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(status: FormsStatus.authenticated));
+      emit(state.copyWith(
+          status: FormsStatus.authenticated,
+          userModel: networkResponse.data as UserModel,
+          statusMessage: "User Info"));
     } else {
       emit(
         state.copyWith(

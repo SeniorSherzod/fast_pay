@@ -4,14 +4,11 @@ import 'package:fast_pay/data/models/forms_status.dart';
 import 'package:fast_pay/screens/auth/widgets/my_button.dart';
 import 'package:fast_pay/screens/routes.dart';
 import 'package:fast_pay/utils/connstants/app_const.dart';
-import 'package:fast_pay/utils/extensions/extensions.dart';
 import 'package:fast_pay/utils/images/images.dart';
 import 'package:fast_pay/utils/styles/styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../widgets/textfield.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -42,7 +39,7 @@ class _AuthScreenState extends State<AuthScreen> {
               padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
-                top: 1600,
+                top: 160,
               ),
               child: Column(
                 children: [

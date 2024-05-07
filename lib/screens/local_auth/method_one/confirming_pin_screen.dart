@@ -94,7 +94,7 @@ class _ConfirmPinScreenState extends State<ConfirmPinScreen> {
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(
         context,
-        isBiometricsEnabled ? RouteNames.touchId : RouteNames.tabRoute,
+        isBiometricsEnabled ? RouteNames.touchId : RouteNames.touchId,
         (route) => false);
   }
 }

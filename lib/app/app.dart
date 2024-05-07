@@ -1,8 +1,7 @@
-import 'package:fast_pay/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../blocs/auth/auth_bloc.dart';
+import '../blocs/connectivity/connectivity_bloc.dart';
 import '../blocs/user_profile/user_profile_bloc.dart';
 import '../data/repositories/auth_repository.dart';
 import '../data/repositories/user_profile_repository.dart';
@@ -10,7 +9,7 @@ import '../screens/routes.dart';
 import '../services/local_notification_service.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +25,7 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(create: (_) => ConnectivityBloc()),
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
@@ -38,6 +38,7 @@ class App extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          // theme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,
           initialRoute: RouteNames.splashScreen,
           navigatorKey: navigatorKey,

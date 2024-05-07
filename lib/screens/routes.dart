@@ -1,4 +1,5 @@
 import 'package:fast_pay/blocs/user_profile/user_profile_bloc.dart';
+import 'package:fast_pay/data/models/user_model.dart';
 import 'package:fast_pay/screens/auth/register_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_one/confirming_pin_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_one/entry_pin_screen.dart';
@@ -19,7 +20,7 @@ class AppRoutes {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.splashScreen:
-        return navigate(SplashScreen());
+        return navigate(const SplashScreen());
 
       case RouteNames.tabRoute:
         return navigate(const TabScreen());
@@ -36,8 +37,8 @@ class AppRoutes {
         return navigate(const AuthScreen());
       case RouteNames.onBoardingRoute:
         return navigate(const OnBoardingScreen());
-      case RouteNames.logIN:
-        return navigate(const AuthScreen());
+      // case RouteNames.logIN:
+      //   return navigate(const AuthScreen());
       case RouteNames.register:
         return navigate(const RegisterScreen());
       case RouteNames.setPinRoute:
@@ -51,7 +52,7 @@ class AppRoutes {
       case RouteNames.touchId:
         return navigate(const TouchIdScreen());
       case RouteNames.updateUser:
-        return navigate(const Updatescreen());
+        return navigate( UpdateScreen(userModel: settings.arguments as UserModel,));
 
       default:
         return navigate(

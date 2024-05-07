@@ -45,17 +45,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
                 TextButton(
                   onPressed:(){
-                    // if (activeIndex == 0) {
-                    //   StorageRepository.setBool(
-                    //     key: "is_new_user",
-                    //     value: true,
-                    //   ).then(
-                    //         (value) {
-                    //       Navigator.pushReplacementNamed(
-                    //           context, RouteNames.authRoute);
-                    //     },
-                    //   );
-                    // }
+                    Navigator.pushReplacementNamed(
+                        context, RouteNames.setPinRoute);
                   },
                   child: Text(
                     "SKIP",

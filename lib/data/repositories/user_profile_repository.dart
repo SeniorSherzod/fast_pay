@@ -79,7 +79,7 @@ class UserProfileRepository {
 
   Future<NetworkResponse> getUserByDocId(String docId) async {
     try {
-      print("keldi @@@@@@@@@@@");
+      print("user by docid @@@@@@@@@@@");
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection(AppConstants.users)
           .doc(docId)
@@ -103,7 +103,7 @@ class UserProfileRepository {
       // if (user != null) {
       //   uuId = user.uid;
       // }
-      print("qwertyuytrew@@@@@@");
+      print("user by uid@@@@@@");
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(AppConstants.users)
           .where("authUid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)

@@ -25,7 +25,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Entry pin"),
+        title: Text("Set pin"),
       ),
       body: Column(
         children: [

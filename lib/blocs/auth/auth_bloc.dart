@@ -26,8 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final AuthRepository authRepository;
-  final UserModel userModel=UserModel.initial();
-
   _checkAuthentication(CheckAuthenticationEvent event, emit) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -93,18 +91,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _logOutUser(LogOutUserEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
-    NetworkResponse networkResponse = await authRepository.logOutUser();
-    if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(
-        status: FormsStatus.authenticated,
-      ));
-    } else {
-      emit(
-        state.copyWith(
-            status: FormsStatus.error,
-            statusMessage: networkResponse.errorText),
-      );
-    }
+    await authRepository.logOutUser();
+    // NetworkResponse networkResponse = await authRepository.logOutUser();
+    // if (networkResponse.errorText.isEmpty) {
+    //   emit(state.copyWith(
+    //     status: FormsStatus.authenticated,
+    //   ));
+    // } else {
+    //   emit(
+    //     state.copyWith(
+    //         status: FormsStatus.error,
+    //         statusMessage: networkResponse.errorText),
+    //   );
+    // }
   }
 
   _googleSignIn(SignInWithGoogleEvent event, emit) async {
