@@ -1,3 +1,4 @@
+import 'package:fast_pay/utils/formatters/formatters.dart';
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
@@ -12,6 +13,7 @@ class MyTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? errorMsg;
   final String? Function(String?)? onChanged;
+  final AppInputFormatters? inputFormatters;
 
   const MyTextField({
     super.key,
@@ -25,12 +27,13 @@ class MyTextField extends StatelessWidget {
     this.validator,
     this.focusNode,
     this.errorMsg,
-    this.onChanged
+    this.onChanged, this.inputFormatters
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      // inputFormatters: ,
       validator: validator,
       controller: controller,
       obscureText: obscureText,

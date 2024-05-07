@@ -7,6 +7,7 @@ import 'package:fast_pay/screens/local_auth/method_one/set_pin_screen.dart';
 import 'package:fast_pay/screens/local_auth/method_two/touch_id_screen.dart';
 import 'package:fast_pay/screens/payment/payment_screen.dart';
 import 'package:fast_pay/screens/splash/splash.dart';
+import 'package:fast_pay/screens/tab/card/edit_card_screen.dart';
 import 'package:fast_pay/screens/tab/profile/update_screen.dart';
 import 'package:fast_pay/screens/tab/tab_screen.dart';
 import 'package:fast_pay/screens/transfer/transfer_screen.dart';
@@ -53,6 +54,8 @@ class AppRoutes {
         return navigate(const TouchIdScreen());
       case RouteNames.updateUser:
         return navigate( UpdateScreen(userModel: settings.arguments as UserModel,));
+      case RouteNames.updateCard:
+        return navigate( EditCardScreen());
 
       default:
         return navigate(
@@ -85,4 +88,5 @@ class RouteNames {
   static const String entryPinRoute = "/entryPinRoute_route";
   static const String touchId = "/touchId_route";
   static const String updateUser = "/updateUser_route";
+  static const String updateCard = "/updateCard_route";
 }

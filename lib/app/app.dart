@@ -1,3 +1,5 @@
+import 'package:fast_pay/blocs/cards/cards_bloc.dart';
+import 'package:fast_pay/data/repositories/cards_reopository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
@@ -22,6 +24,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (_) => AuthRepository()),
         RepositoryProvider(create: (_) => UserProfileRepository()),
+        RepositoryProvider(create: (_) => CardsRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -34,6 +37,11 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => UserProfileBloc(
               context.read<UserProfileRepository>()
+            ),
+          ),
+          BlocProvider(
+            create: (context) => CardBloc(
+                context.read<CardsRepository>()
             ),
           ),
         ],
