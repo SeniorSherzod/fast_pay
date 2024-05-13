@@ -1,7 +1,9 @@
 import 'package:fast_pay/utils/extensions/extensions.dart';
+import 'package:fast_pay/utils/images/images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../blocs/auth/auth_bloc.dart';
 import '../../../blocs/user_profile/user_profile_bloc.dart';
@@ -16,9 +18,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
+  void initState() {
+    BlocProvider.of<UserProfileBloc>(context).add(GetCurrentEvent(''));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    width=MediaQuery.of(context).size.width;
-    height=MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -66,13 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           blurRadius: 20,
                           spreadRadius: 3),
                     ],
-                    // image: DecorationImage(
-                    //   image: state.userModel.imageUrl.isEmpty
-                    //       ? const AssetImage("assets/images/profile.png")
-                    //       : NetworkImage(state.userModel.imageUrl)
-                    //   as ImageProvider,
-                    // ),
                   ),
+                  child: SvgPicture.asset(AppImages.profile),
                 ),
                 SizedBox(height: 10.h),
                 Text(
@@ -87,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Expanded(
                   child: Container(
                     padding:
-                    EdgeInsets.only(left: 10.w, right: 10.w, top: 30.h),
+                        EdgeInsets.only(left: 10.w, right: 10.w, top: 30.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.w),

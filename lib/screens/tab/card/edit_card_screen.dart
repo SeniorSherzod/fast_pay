@@ -1,8 +1,10 @@
+import 'package:fast_pay/screens/widgets/textfield.dart';
 import 'package:fast_pay/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../blocs/cards/cards_bloc.dart';
+import '../../../blocs/cards/cards_event.dart';
+import '../../../blocs/cards/cards_state.dart';
 import '../../../data/models/cards_model.dart';
 import '../../../utils/colors/colors.dart';
 import '../../../utils/styles/styles.dart';
@@ -18,53 +20,31 @@ class _EditCardScreenState extends State<EditCardScreen> {
   TextEditingController cardController = TextEditingController();
   TextEditingController expireDateController = TextEditingController();
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Card Screen"),
+        title: const Text("Add Card Screen"),
       ),
-      body: BlocConsumer<CardBloc, CardsState>(
-        builder: (context, state) {
+      body: BlocConsumer<UserCardsBloc, UserCardsState>(
+        builder: (BuildContext context, UserCardsState state) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
             child: Column(
               children: [
-                TextField(
-                  controller: cardController,
-                  decoration: InputDecoration(
-                      hintText: "Card Number",
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: AppColors.black.withOpacity(0.4))),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: AppColors.black.withOpacity(0.4)))),
-                ),
+                MyTextField(
+                    controller: cardController,
+                    hintText: "card number ",
+                    obscureText: false,
+                    keyboardType: TextInputType.number),
                 SizedBox(
                   height: 20.h,
                 ),
-                TextField(
-                  controller: expireDateController,
-                  decoration: InputDecoration(
-                      hintText: "expire date",
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: AppColors.black.withOpacity(0.4))),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: AppColors.black.withOpacity(0.4)))),
-                ),
+                MyTextField(
+                    controller: expireDateController,
+                    hintText: "expire date",
+                    obscureText: false,
+                    keyboardType: TextInputType.text),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -72,7 +52,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                   width: width,
                   child: TextButton(
                     onPressed: () {
-                      List<CardModel> db = state.cardsDb;
+                      List<CardModel> db = state.cardsDB;
                       List<CardModel> myCards = state.userCards;
                       bool isExists = false;
                       for (var element in myCards) {
@@ -81,7 +61,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           break;
                         }
                       }
-                      CardModel? cardModel;
+                      CardModel cardModel = CardModel.initial();
                       bool hasInDb = false;
                       for (var element in db) {
                         if (element.cardNumber == cardController.text) {
@@ -91,11 +71,14 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         }
                       }
                       if ((!isExists) && hasInDb) {
-                        context
-                            .read<CardBloc>()
-                            .add(AddCardEvent(cardModel!));
+                        cardModel = cardModel.copyWith(
+                          expireDate: expireDateController.text,
+                          cardNumber: cardController.text,
+                        );
+                        context.read<UserCardsBloc>().add(AddCardEvent(cardModel));
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text("ERROR"),
                           backgroundColor: Colors.red,
                         ));

@@ -1,95 +1,110 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:fast_pay/data/models/cards_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/models/cards_model.dart';
 import '../../data/models/forms_status.dart';
 import '../../data/models/network_response.dart';
 import '../../data/repositories/cards_reopository.dart';
-part 'cards_event.dart';
-part 'cards_state.dart';
+import 'cards_event.dart';
+import 'cards_state.dart';
 
-
-class CardBloc extends Bloc<UserCardsEvent, CardsState> {
-  CardBloc(this.cardRepository)
+class UserCardsBloc extends Bloc<UserCardsEvent, UserCardsState> {
+  UserCardsBloc({required this.cardsRepository})
       : super(
-    const CardsState(
+    const UserCardsState(
       userCards: [],
+      cardsDB: [],
+      activeCards: [],
       status: FormsStatus.pure,
       errorMessage: "",
       statusMessage: "",
-      cardsDb: [],
     ),
   ) {
     on<AddCardEvent>(_addCard);
-    on<DeleteCardEvent>(_deleteCard);
     on<UpdateCardEvent>(_updateCard);
-    on<GetCardsUserByIdEvent>(_listenCardUser);
-    on<GetCardsDatabaseEvent>(_listenCardDatabase);
+    on<DeleteCardEvent>(_deleteCard);
+    on<GetCardsByUserId>(_listenCard);
+    on<GetActiveCards>(_listenActiveCard);
+    on<GetCardsDatabaseEvent>(_listenCardsDatabase);
   }
 
-  final CardsRepository cardRepository;
+  final CardsRepository cardsRepository;
 
-  Future<void> _addCard(AddCardEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
-
+  _addCard(AddCardEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
 
-    networkResponse =
-    await cardRepository.addCard(event.cardModel);
-
-    if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(status: FormsStatus.success));
+    NetworkResponse response = await cardsRepository.addCard(event.cardModel);
+    if (response.errorText.isEmpty) {
+      emit(
+        state.copyWith(
+          status: FormsStatus.success,
+          statusMessage: "added",
+        ),
+      );
     } else {
-      emit(state.copyWith(status: FormsStatus.error));
+      emit(state.copyWith(
+        status: FormsStatus.error,
+        errorMessage: response.errorText,
+      ));
     }
   }
 
-  Future<void> _deleteCard(DeleteCardEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
-
+  _updateCard(UpdateCardEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
 
-    networkResponse =
-    await cardRepository.deleteCard(event.cardModel.cardId);
-
-    if (networkResponse.errorText.isEmpty) {
+    NetworkResponse response =
+    await cardsRepository.updateCard(event.cardModel);
+    if (response.errorText.isEmpty) {
       emit(state.copyWith(status: FormsStatus.success));
     } else {
-      emit(state.copyWith(status: FormsStatus.error));
+      emit(state.copyWith(
+        status: FormsStatus.error,
+        errorMessage: response.errorText,
+      ));
     }
   }
 
-  Future<void> _updateCard(UpdateCardEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
-
+  _deleteCard(DeleteCardEvent event, emit) async {
     emit(state.copyWith(status: FormsStatus.loading));
 
-    networkResponse =
-    await cardRepository.updateCard(event.cardModel);
-
-    if (networkResponse.errorText.isEmpty) {
+    NetworkResponse response =
+    await cardsRepository.deleteCard(event.cardDocId);
+    if (response.errorText.isEmpty) {
       emit(state.copyWith(status: FormsStatus.success));
     } else {
-      emit(state.copyWith(status: FormsStatus.error));
+      emit(state.copyWith(
+        status: FormsStatus.error,
+        errorMessage: response.errorText,
+      ));
     }
   }
 
-  _listenCardUser(GetCardsUserByIdEvent event, Emitter emit) async {
-    debugPrint("_listenCardUser  keldi ----------------------");
-    debugPrint("DocId:  ${event.userId} ----------------------");
-    await emit
-        .onEach(cardRepository.getCardsByUserId(event.userId),
-        onData: (List<CardModel> userCards) {
-          emit(state.copyWith(userCards: userCards));
-        });
-  }
-
-  _listenCardDatabase(GetCardsDatabaseEvent event,Emitter emit)async{
+  _listenCard(GetCardsByUserId event, Emitter emit) async {
     await emit.onEach(
-        cardRepository.getCardsDatabase(),
-        onData:(List<CardModel> db){
-          emit(state.copyWith(cardsDb: db));
-        }
+      cardsRepository.getCardsByUserId(event.userId),
+      onData: (List<CardModel> userCards) {
+        emit(state.copyWith(userCards: userCards));
+      },
+    );
+  }
+
+  _listenActiveCard(GetActiveCards event, Emitter emit) async {
+    await emit.onEach(
+      cardsRepository.getActiveCards(),
+      onData: (List<CardModel> activeCards) {
+        emit(state.copyWith(activeCards: activeCards));
+      },
+    );
+  }
+
+  _listenCardsDatabase(GetCardsDatabaseEvent event, Emitter emit) async {
+    debugPrint("DATABASE CARDS");
+    await emit.onEach(
+      cardsRepository.getCardsDatabase(),
+      onData: (List<CardModel> db) {
+        debugPrint("DATABASE CARDS LENGTH${db.length}");
+        emit(state.copyWith(cardsDB: db));
+      },
     );
   }
 }

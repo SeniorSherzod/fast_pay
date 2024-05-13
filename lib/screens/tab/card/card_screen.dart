@@ -1,7 +1,8 @@
+import 'package:fast_pay/blocs/cards/cards_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../blocs/cards/cards_bloc.dart';
+import '../../../blocs/cards/cards_state.dart';
 import '../../../blocs/user_profile/user_profile_bloc.dart';
 import '../../../data/models/cards_model.dart';
 import '../../../utils/colors/colors.dart';
@@ -19,7 +20,7 @@ class CardScreen extends StatefulWidget {
 class _CardScreenState extends State<CardScreen> {
   @override
   void initState() {
-    context.read<CardBloc>().add(GetCardsUserByIdEvent(
+    context.read<UserCardsBloc>().add(GetCardsByUserId(
         userId: context.read<UserProfileBloc>().state.userModel.userId));
     super.initState();
   }
@@ -27,14 +28,15 @@ class _CardScreenState extends State<CardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Card screen"),),
-      body: BlocBuilder<CardBloc,CardsState>(
+      body: BlocBuilder<UserCardsBloc,UserCardsState>(
         builder: (context,state){
           debugPrint("CARD STATE LENGTH${state.userCards.length}");
           return Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                Expanded(
+                SizedBox(
+                  height: 150,
                   child: ListView(children:List.generate(state.userCards.length, (index){
                     CardModel cardModel=state.userCards[index];
                     return Container(

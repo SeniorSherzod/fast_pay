@@ -97,16 +97,16 @@ class UserProfileRepository {
 
   Future<NetworkResponse> getUserByUid() async {
     try {
-      // User? user = FirebaseAuth.instance.currentUser;
-      // String uuId = "";
-      //
-      // if (user != null) {
-      //   uuId = user.uid;
-      // }
-      print("user by uid@@@@@@");
+      User? user = FirebaseAuth.instance.currentUser;
+      String uuId = "";
+
+      if (user != null) {
+        uuId = user.uid;
+      }
+      // print("user by uid@@@@@@");
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(AppConstants.users)
-          .where("authUid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where("authId", isEqualTo: uuId)
           .get();
       List<UserModel> users = querySnapshot.docs
           .map((e) => UserModel.fromJson(e.data() as Map<String, dynamic>))

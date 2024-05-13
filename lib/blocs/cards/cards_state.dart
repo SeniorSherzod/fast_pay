@@ -1,45 +1,50 @@
-part of 'cards_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-class CardsState extends Equatable {
+import '../../data/models/cards_model.dart';
+import '../../data/models/forms_status.dart';
 
+class UserCardsState extends Equatable {
   final List<CardModel> userCards;
-  final List<CardModel> cardsDb;
+  final List<CardModel> cardsDB;
+  final List<CardModel> activeCards;
   final FormsStatus status;
   final String errorMessage;
   final String statusMessage;
 
-
-  const CardsState({
+  const UserCardsState({
     required this.status,
     required this.userCards,
-    required this.statusMessage,
     required this.errorMessage,
-    required this.cardsDb
+    required this.statusMessage,
+    required this.cardsDB,
+    required this.activeCards,
   });
 
-  CardsState copyWith({
+  UserCardsState copyWith({
     List<CardModel>? userCards,
-    List<CardModel>? cardsDb,
+    List<CardModel>? cardsDB,
+    List<CardModel>? activeCards,
     FormsStatus? status,
+    String? errorMessage,
     String? statusMessage,
-    String? errorMessage
-  }){
-    return CardsState(
-        userCards: userCards ?? this.userCards,
-        cardsDb: cardsDb ?? this.cardsDb,
-        status: status ?? this.status,
-        statusMessage: statusMessage ?? this.statusMessage,
-        errorMessage: errorMessage ?? this.errorMessage
+  }) {
+    return UserCardsState(
+      userCards: userCards ?? this.userCards,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      statusMessage: statusMessage ?? this.statusMessage,
+      cardsDB: cardsDB ?? this.cardsDB,
+      activeCards: activeCards ?? this.activeCards,
     );
   }
 
-
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     status,
     userCards,
-    statusMessage,
     errorMessage,
-    cardsDb
+    statusMessage,
+    cardsDB,
+    activeCards,
   ];
 }

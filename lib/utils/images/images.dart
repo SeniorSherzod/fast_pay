@@ -7,6 +7,10 @@ class AppImages {
   static const String img_3 = "assets/images/img_3.png";
   static const String img_4 = "assets/images/img_4.png";
   static const String bank = "assets/images/bank.png";
+  static const String chip = "assets/images/bank.chip";
+  static const String uzCard = "assets/images/uzcard.chip";
+  static const String humo = "assets/images/humo.chip";
+  static const String visa = "assets/images/bank.chip";
 
 
   //.svg

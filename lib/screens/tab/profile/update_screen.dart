@@ -66,14 +66,14 @@ class _UpdateScreenState extends State<UpdateScreen> {
               MyTextField(
                 controller: emailController,
                 hintText: "Email",
-                obscureText: true,
+                obscureText: false,
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 20.h),
               MyTextField(
                 controller: fullNameController,
                 hintText: "Full name",
-                obscureText: true,
+                obscureText: false,
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 20.h),

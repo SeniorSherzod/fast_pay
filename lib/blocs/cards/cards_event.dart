@@ -1,6 +1,8 @@
-part of 'cards_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-sealed class UserCardsEvent extends Equatable {}
+import '../../data/models/cards_model.dart';
+
+abstract class UserCardsEvent extends Equatable {}
 
 class AddCardEvent extends UserCardsEvent {
   final CardModel cardModel;
@@ -14,31 +16,38 @@ class AddCardEvent extends UserCardsEvent {
 class UpdateCardEvent extends UserCardsEvent {
   final CardModel cardModel;
 
-  UpdateCardEvent({required  this.cardModel});
+  UpdateCardEvent(this.cardModel);
 
   @override
   List<Object?> get props => [cardModel];
 }
 
 class DeleteCardEvent extends UserCardsEvent {
-  final CardModel cardModel;
+  final String cardDocId;
 
-  DeleteCardEvent(this.cardModel);
+  DeleteCardEvent(this.cardDocId);
 
   @override
-  List<Object?> get props => [cardModel];
+  List<Object?> get props => [cardDocId];
 }
 
-class GetCardsUserByIdEvent extends UserCardsEvent {
-  final String userId;
+class GetCardsByUserId extends UserCardsEvent {
+  GetCardsByUserId({required this.userId});
 
-  GetCardsUserByIdEvent({required this.userId});
+  final String userId;
 
   @override
   List<Object?> get props => [userId];
 }
-class  GetCardsDatabaseEvent extends UserCardsEvent{
+
+class GetActiveCards extends UserCardsEvent {
   @override
-  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class GetCardsDatabaseEvent extends UserCardsEvent {
+  GetCardsDatabaseEvent();
+
+  @override
   List<Object?> get props => [];
 }

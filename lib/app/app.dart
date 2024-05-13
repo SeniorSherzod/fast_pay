@@ -3,6 +3,7 @@ import 'package:fast_pay/data/repositories/cards_reopository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
+import '../blocs/cards/cards_event.dart';
 import '../blocs/connectivity/connectivity_bloc.dart';
 import '../blocs/user_profile/user_profile_bloc.dart';
 import '../data/repositories/auth_repository.dart';
@@ -40,9 +41,11 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => CardBloc(
-                context.read<CardsRepository>()
-            ),
+            create: (context) => UserCardsBloc(
+              cardsRepository: context.read<CardsRepository>(),
+            )
+              ..add(GetCardsDatabaseEvent())
+              ..add(GetActiveCards()),
           ),
         ],
         child: MaterialApp(
